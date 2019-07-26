@@ -24,26 +24,34 @@ namespace CircuitBreakerClient
 
         public static async Task CircuitBreakerClient(string baseUrl, string apiMethod)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(baseUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(baseUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                ////GET Method "api/Department/1"
-                //HttpResponseMessage response = await client.GetAsync(apiMethod);
+                    //GET Method "api/Department/1"
+                    HttpResponseMessage response = await client.GetAsync(apiMethod);
 
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var resp = await response.Content.ReadAsStringAsync();
-                //    Console.WriteLine(resp);
-                //}
-                //else
-                //{
-                //    Console.WriteLine("Internal server Error");
-                //}
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var resp = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(resp);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Internal server Error");
+                    }
 
-                Console.WriteLine("Internal server Error");
+                    Console.WriteLine("Internal server Error");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
             }
         }
     }
